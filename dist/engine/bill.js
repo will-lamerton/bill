@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = void 0;
 const fen_1 = require("./fen");
+const legal_moves_1 = require("./generate/legal-moves");
 const validate_1 = require("./rules/validate");
 const perf_hooks_1 = require("perf_hooks");
 let startTime;
@@ -23,7 +24,9 @@ function run(fen) {
         };
     }
     console.log("Generating next move...");
-    const move = "g1f3";
+    const legalMoves = (0, legal_moves_1.generateLegalMoves)(fen);
+    const move = legalMoves[0];
+    console.log(legalMoves, legalMoves.length);
     // Is move legal?
     console.log("Checking move is legal...");
     const isLegal = (0, validate_1.isMoveLegal)(fen, move);

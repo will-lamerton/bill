@@ -1,4 +1,5 @@
 import { isValidFEN, startingPosition, updateFEN } from "./fen";
+import { generateLegalMoves } from "./generate/legal-moves";
 import { isMoveLegal } from "./rules/validate";
 import { performance } from "perf_hooks";
 
@@ -36,7 +37,11 @@ export function run(fen: string): EngineOuput {
   }
 
   console.log("Generating next move...");
-  const move = "g1f3";
+  const legalMoves = generateLegalMoves(fen);
+
+  const move = legalMoves[0];
+
+  console.log(legalMoves, legalMoves.length);
 
   // Is move legal?
   console.log("Checking move is legal...");
