@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateFEN = exports.generateFEN = exports.parseMove = exports.parseFEN = exports.isValidFEN = exports.startingPosition = void 0;
+exports.startingPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
+var validate_1 = require("./fen/validate");
+Object.defineProperty(exports, "isValidFEN", { enumerable: true, get: function () { return validate_1.isValidFEN; } });
+var parse_1 = require("./fen/parse");
+Object.defineProperty(exports, "parseFEN", { enumerable: true, get: function () { return parse_1.parseFEN; } });
+Object.defineProperty(exports, "parseMove", { enumerable: true, get: function () { return parse_1.parseMove; } });
+var generate_1 = require("./fen/generate");
+Object.defineProperty(exports, "generateFEN", { enumerable: true, get: function () { return generate_1.generateFEN; } });
+var update_1 = require("./fen/update");
+Object.defineProperty(exports, "updateFEN", { enumerable: true, get: function () { return update_1.updateFEN; } });
