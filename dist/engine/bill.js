@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.run = void 0;
 const fen_1 = require("./fen");
-const legal_moves_1 = require("./generate/legal-moves");
-const validate_1 = require("./rules/validate");
+const moves_1 = require("./moves");
+const board_1 = require("./board");
 const perf_hooks_1 = require("perf_hooks");
 let startTime;
 function calculatePerformance() {
@@ -14,32 +14,23 @@ function run(fen) {
     if (fen === "start") {
         fen = fen_1.startingPosition;
     }
-    console.log(`Checking if FEN is valid...`);
-    const valid = (0, fen_1.isValidFEN)(fen);
-    if (valid === false) {
+    // Check FEN is valid.
+    const isValid = (0, fen_1.isValidFEN)(fen);
+    if (isValid.ok === false && isValid.error !== undefined) {
         return {
-            error: true,
-            message: "FEN string is not valid.",
+            error: false,
+            message: isValid.error,
             time: calculatePerformance(),
         };
     }
-    console.log("Generating next move...");
-    const legalMoves = (0, legal_moves_1.generateLegalMoves)(fen);
+    // Generate legal moves.
+    const legalMoves = (0, moves_1.generateLegalMoves)(fen);
+    // AI HERE
     const move = legalMoves[0];
-    console.log(legalMoves, legalMoves.length);
-    // Is move legal?
-    console.log("Checking move is legal...");
-    const isLegal = (0, validate_1.isMoveLegal)(fen, move);
-    if (isLegal === false) {
-        return {
-            error: true,
-            message: "Something went wrong, the move suggested by Bill is not legal.",
-            move: "g1f3",
-            time: calculatePerformance(),
-        };
-    }
-    // Update fen with new move.
-    const newFen = (0, fen_1.updateFEN)(fen, move);
+    // Make selected move.
+    const newFen = (0, moves_1.makeMove)(fen, move);
+    // Output board
+    console.log((0, board_1.showBoard)(newFen));
     return {
         error: false,
         move: move,

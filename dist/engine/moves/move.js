@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.generateLegalMoves = void 0;
+exports.makeMove = void 0;
 const chess_js_1 = require("chess.js");
-const generateLegalMoves = (fen) => {
+const makeMove = (fen, move) => {
     const chess = new chess_js_1.Chess();
     chess.load(fen);
-    return chess.moves();
+    chess.move(move);
+    return chess.fen();
 };
-exports.generateLegalMoves = generateLegalMoves;
+exports.makeMove = makeMove;

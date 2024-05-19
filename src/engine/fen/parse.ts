@@ -1,25 +1,29 @@
 import { Board, Move, Piece } from "../fen";
 
 export function parseFEN(fen: string): Board {
-  const [placement] = fen.split(" ");
-  const rows = placement.split("/");
-  const board: Board = [];
-
-  for (const row of rows) {
-    const boardRow: Piece[] = [];
+  const parts = fen.split(" ");
+  const squares = parts[0].split("/").map((row) => {
+    const expandedRow: (Piece | null)[] = [];
     for (const char of row) {
       if (isNaN(Number(char))) {
-        boardRow.push(char);
+        expandedRow.push(char);
       } else {
         for (let i = 0; i < Number(char); i++) {
-          boardRow.push(null);
+          expandedRow.push(null);
         }
       }
     }
-    board.push(boardRow);
-  }
+    return expandedRow;
+  });
 
-  return board;
+  return {
+    squares,
+    activeColor: parts[1] as "w" | "b",
+    castlingRights: parts[2],
+    enPassantTarget: parts[3] === "-" ? null : parts[3],
+    halfMoveClock: parseInt(parts[4], 10),
+    fullMoveNumber: parseInt(parts[5], 10),
+  };
 }
 
 export function parseMove(move: string): Move {

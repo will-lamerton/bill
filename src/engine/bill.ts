@@ -1,6 +1,7 @@
-import { isValidFEN, startingPosition, updateFEN } from "./fen";
-import { generateLegalMoves } from "./generate/legal-moves";
-import { isMoveLegal } from "./rules/validate";
+import { startingPosition, isValidFEN } from "./fen";
+import { generateLegalMoves, makeMove } from "./moves";
+import { showBoard } from "./board";
+
 import { performance } from "perf_hooks";
 
 interface EngineOuput {
@@ -24,40 +25,28 @@ export function run(fen: string): EngineOuput {
     fen = startingPosition;
   }
 
-  console.log(`Checking if FEN is valid...`);
+  // Check FEN is valid.
+  const isValid = isValidFEN(fen);
 
-  const valid = isValidFEN(fen);
-
-  if (valid === false) {
+  if (isValid.ok === false && isValid.error !== undefined) {
     return {
-      error: true,
-      message: "FEN string is not valid.",
+      error: false,
+      message: isValid.error,
       time: calculatePerformance(),
     };
   }
 
-  console.log("Generating next move...");
+  // Generate legal moves.
   const legalMoves = generateLegalMoves(fen);
 
+  // AI HERE
   const move = legalMoves[0];
 
-  console.log(legalMoves, legalMoves.length);
+  // Make selected move.
+  const newFen = makeMove(fen, move);
 
-  // Is move legal?
-  console.log("Checking move is legal...");
-  const isLegal = isMoveLegal(fen, move);
-
-  if (isLegal === false) {
-    return {
-      error: true,
-      message: "Something went wrong, the move suggested by Bill is not legal.",
-      move: "g1f3",
-      time: calculatePerformance(),
-    };
-  }
-
-  // Update fen with new move.
-  const newFen = updateFEN(fen, move);
+  // Output board
+  console.log(showBoard(newFen));
 
   return {
     error: false,

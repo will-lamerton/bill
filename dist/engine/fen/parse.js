@@ -2,24 +2,29 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.parseMove = exports.parseFEN = void 0;
 function parseFEN(fen) {
-    const [placement] = fen.split(" ");
-    const rows = placement.split("/");
-    const board = [];
-    for (const row of rows) {
-        const boardRow = [];
+    const parts = fen.split(" ");
+    const squares = parts[0].split("/").map((row) => {
+        const expandedRow = [];
         for (const char of row) {
             if (isNaN(Number(char))) {
-                boardRow.push(char);
+                expandedRow.push(char);
             }
             else {
                 for (let i = 0; i < Number(char); i++) {
-                    boardRow.push(null);
+                    expandedRow.push(null);
                 }
             }
         }
-        board.push(boardRow);
-    }
-    return board;
+        return expandedRow;
+    });
+    return {
+        squares,
+        activeColor: parts[1],
+        castlingRights: parts[2],
+        enPassantTarget: parts[3] === "-" ? null : parts[3],
+        halfMoveClock: parseInt(parts[4], 10),
+        fullMoveNumber: parseInt(parts[5], 10),
+    };
 }
 exports.parseFEN = parseFEN;
 function parseMove(move) {
